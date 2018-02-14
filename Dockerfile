@@ -11,12 +11,11 @@ ENV fpm_conf /etc/php/7.2/fpm/pool.d/www.conf
 # Install Basic Requirements
 RUN apt-get update \
     && apt-get install --no-install-recommends --no-install-suggests -q -y gnupg2 dirmngr wget apt-transport-https lsb-release ca-certificates \
-    && apt-key adv --keyserver hkp://pgp.mit.edu:80 --recv-keys 573BFD6B3D8FBC641079A6ABABF5BD827BD9BF62 \
     && echo "deb http://nginx.org/packages/mainline/debian/ stretch nginx" >> /etc/apt/sources.list \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list \
     && apt-get update \
-    && apt-get install --no-install-recommends --no-install-suggests -q -y \
+    && apt-get install --no-install-recommends --no-install-suggests -q -y --allow-unauthenticated \
             apt-utils \
             curl \
             nano \
@@ -70,6 +69,7 @@ ADD ./supervisord.conf /etc/supervisord.conf
 
 # Override nginx's default config
 ADD ./default.conf /etc/nginx/conf.d/default.conf
+ADD ./nginx.conf /etc/nginx/nginx.conf
 
 # Override default nginx welcome page
 COPY html /usr/share/nginx/html
